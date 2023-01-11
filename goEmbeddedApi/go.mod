@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/gofiber/fiber/v2 v2.41.0 // indirect
+	github.com/gofiber/fiber/v2 v2.41.0 // direct
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect

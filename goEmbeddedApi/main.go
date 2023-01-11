@@ -10,4 +10,6 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("LoL")
 	})
+
+	app.Listen(":8080")
 }
