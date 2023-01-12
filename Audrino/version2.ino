@@ -1,4 +1,17 @@
 
+//Tidsting
+#include <RTClib.h>
+#include <Wire.h>
+RTC_DS3231 rtc;
+char t[32];
+
+
+//Tidstagning
+#include <MsTimer2.h>
+
+
+
+
 
 #include <Wire.h>
 #include "rgb_lcd.h"
@@ -9,6 +22,8 @@ const int colorR = 255;
 const int colorG = 255;
 const int colorB = 255;
 
+int starttime = 8;
+int endtime = 18;
 
 float maxt = 25;
 float mint = 15;
@@ -16,7 +31,7 @@ float mint = 15;
 float maxh = 80;
 float minh = 60;
 
-bool isF = true;
+bool isF = false;
 
 const int buttonPin = 6;
 
@@ -25,26 +40,67 @@ const int buttonPin = 6;
 #define DHTTYPE DHT11 // DHT 11
  
 DHT dht(DHTPIN, DHTTYPE);
+
+
+void flash() {
+
+  Serial.print("hej");
+  Serial.print("hej");
+  Serial.print("hej");
+  Serial.print("hej");
+  Serial.print("hej");
+  
+
+
+}
  
 void setup()
 {
     Serial.begin(9600);
-
-
     pinMode(buttonPin,INPUT_PULLUP);
-
-
     lcd.begin(16, 2);
     lcd.setRGB(colorR, colorG, colorB);
 
 
+    //Tidsting
+    Wire.begin();
+    rtc.begin();
+    rtc.adjust(DateTime(F(__DATE__),F(__TIME__)));
+
     dht.begin();
+
+    //900000
+    MsTimer2::set(500, flash); // 500ms period
+    MsTimer2::start();
+
+
 }
  
+
+
+
+
 void loop()
 {  
 
+    DateTime now = rtc.now();
+    sprintf(t, "%02d:%02d:%02d %02d/%02d/%02d", now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());  
+  
 
+
+    Serial.print(now.hour());
+
+
+    if (now.hour() > starttime-1 && now.hour() < endtime+1)
+    {
+        
+
+    }
+
+ 
+
+    
+    
 
     int digitalVal = digitalRead(buttonPin); // Take a reading
 
