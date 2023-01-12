@@ -1,4 +1,3 @@
-
 //Tidsting
 #include <RTClib.h>
 #include <Wire.h>
@@ -7,7 +6,7 @@ char t[32];
 
 
 //Tidstagning
-#include <MsTimer2.h>
+#include <MsTimer2.h> 
 
 
 
@@ -35,6 +34,9 @@ bool isF = false;
 
 const int buttonPin = 6;
 
+
+int h = 0;
+
 #include "DHT.h" 
 #define DHTPIN A0 // what pin we're connected to
 #define DHTTYPE DHT11 // DHT 11
@@ -43,12 +45,17 @@ DHT dht(DHTPIN, DHTTYPE);
 
 
 void flash() {
+  
 
-  Serial.print("hej");
-  Serial.print("hej");
-  Serial.print("hej");
-  Serial.print("hej");
-  Serial.print("hej");
+  
+
+  if (h > starttime-1 && h < endtime+1)
+  {
+      Serial.print("hej");  
+
+  }
+  
+ 
   
 
 
@@ -69,15 +76,11 @@ void setup()
 
     dht.begin();
 
-    //900000
+    //900000ser
     MsTimer2::set(500, flash); // 500ms period
     MsTimer2::start();
 
-
 }
- 
-
-
 
 
 void loop()
@@ -85,11 +88,9 @@ void loop()
 
     DateTime now = rtc.now();
     sprintf(t, "%02d:%02d:%02d %02d/%02d/%02d", now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());  
-  
 
-
-    Serial.print(now.hour());
-
+    
+    h = now.hour();
 
     if (now.hour() > starttime-1 && now.hour() < endtime+1)
     {
@@ -97,9 +98,6 @@ void loop()
 
     }
 
- 
-
-    
     
 
     int digitalVal = digitalRead(buttonPin); // Take a reading
@@ -136,19 +134,7 @@ void loop()
     if (isnan(t) || isnan(h))
     {
         Serial.println("Failed to read from DHT");
-    }
-    else
-    {
-        Serial.print("Humidity: ");
-        Serial.print(h);
-        Serial.print(" %\t");
-        Serial.print("Temperature: ");
-        Serial.print(t);
-        Serial.println(" *C");
-    }
-
-
-
+    }  
 
 
   if (t > maxt)
