@@ -18,3 +18,7 @@ func (repo *StartupRepo) GetAllStartup() ([]models.Startup, error) {
 
 	return startup, nil
 }
+
+func NewStartupRepo(db *gorm.DB) *StartupRepo {
+	return &StartupRepo{db}
+}
