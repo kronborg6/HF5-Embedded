@@ -18,6 +18,18 @@ func (repo *DataRepo) FindAll() ([]models.Data, error) {
 	return data, nil
 }
 
+func (repo *DataRepo) FindByID(id int) (*[]models.Data, error) {
+	var data []models.Data
+
+	err := repo.db.Debug().Where("id = ?", id).Find(&data).Error
+
+	if err != nil {
+		return &data, err
+	}
+
+	return &data, nil
+}
+
 func NewDataRepo(db *gorm.DB) *DataRepo {
 	return &DataRepo{db}
 }

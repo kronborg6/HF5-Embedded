@@ -19,6 +19,18 @@ func (repo *AlarmRepo) FindAll() ([]models.Alarm, error) {
 	return alarm, nil
 }
 
+func (repo *AlarmRepo) FindByID(id int) (*[]models.Alarm, error) {
+	var alarm []models.Alarm
+
+	err := repo.db.Debug().Where("id = ?", id).Find(&alarm).Error
+
+	if err != nil {
+		return &alarm, err
+	}
+
+	return &alarm, nil
+}
+
 func NewAlarmRepo(db *gorm.DB) *AlarmRepo {
 	return &AlarmRepo{db}
 }
