@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/repos"
 	"gorm.io/gorm"
@@ -22,6 +24,21 @@ func (controller *StartupController) GetAll(c *fiber.Ctx) error {
 	return c.JSON(startup)
 }
 
+func (controller *StartupController) GetById(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	startup, err := controller.repo.GetByID(id)
+
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": "can't find a startup whit that id",
+			"error":   err,
+		})
+	}
+
+	return c.JSON(&startup)
+}
+
 func NewStartupController(repo *repos.StartupRepo) *StartupController {
 	return &StartupController{repo}
 }
@@ -33,4 +50,5 @@ func RegisterStartupController(db *gorm.DB, router fiber.Router) {
 	StartupRouter := router.Group("/startup")
 
 	StartupRouter.Get("/", controller.GetAll)
+	StartupRouter.Get("/:id", controller.GetById)
 }
