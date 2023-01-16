@@ -30,6 +30,16 @@ func (repo *StartupRepo) GetByID(id int) (*[]models.Startup, error) {
 	return &startup, nil
 }
 
+func (repo *StartupRepo) CreateStartup(startup models.Startup) (models.Startup, error) {
+	err := repo.db.Create(&startup).Error
+
+	if err != nil {
+		return startup, err
+	}
+
+	return startup, nil
+}
+
 func NewStartupRepo(db *gorm.DB) *StartupRepo {
 	return &StartupRepo{db}
 }
