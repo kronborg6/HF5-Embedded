@@ -18,3 +18,7 @@ func Init() *gorm.DB {
 	}
 	return db
 }
+
+func Setyup(db *gorm.DB) {
+	db.AutoMigrate()
+}
