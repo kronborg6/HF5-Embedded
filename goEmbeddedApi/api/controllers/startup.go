@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/models"
 	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/repos"
 	"gorm.io/gorm"
 )
@@ -37,6 +38,21 @@ func (controller *StartupController) GetById(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(&startup)
+}
+
+func (controller *StartupController) Create(c *fiber.Ctx) error {
+	var startup models.Startup
+	var err error
+
+	if err = c.BodyParser(&startup); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	if startup, err = controller.repo.CreateStartup(startup); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(startup)
 }
 
 func NewStartupController(repo *repos.StartupRepo) *StartupController {

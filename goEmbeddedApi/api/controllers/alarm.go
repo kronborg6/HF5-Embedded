@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/models"
 	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/repos"
 	"gorm.io/gorm"
 )
@@ -37,6 +38,20 @@ func (controller *AlarmController) GetById(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(&alarm)
+}
+
+func (controller *AlarmController) Create(c *fiber.Ctx) error {
+	var alarm models.Alarm
+	var err error
+
+	if err = c.BodyParser(&alarm); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	if alarm, err = controller.repo.CreateAlarm(alarm); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(alarm)
 }
 
 func NewAlarmController(repo *repos.AlarmRepo) *AlarmController {

@@ -31,6 +31,16 @@ func (repo *AlarmRepo) FindByID(id int) (*[]models.Alarm, error) {
 	return &alarm, nil
 }
 
+func (repo *AlarmRepo) CreateAlarm(alarm models.Alarm) (models.Alarm, error) {
+	err := repo.db.Create(&alarm).Error
+
+	if err != nil {
+		return alarm, err
+	}
+
+	return alarm, nil
+}
+
 func NewAlarmRepo(db *gorm.DB) *AlarmRepo {
 	return &AlarmRepo{db}
 }

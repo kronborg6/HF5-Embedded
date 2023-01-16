@@ -30,6 +30,16 @@ func (repo *DataRepo) FindByID(id int) (*[]models.Data, error) {
 	return &data, nil
 }
 
+func (repo *DataRepo) CreateData(data models.Data) (models.Data, error) {
+	err := repo.db.Create(&data).Error
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
 func NewDataRepo(db *gorm.DB) *DataRepo {
 	return &DataRepo{db}
 }
