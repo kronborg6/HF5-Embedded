@@ -24,11 +24,20 @@ const int colorB = 255;
 int starttime = 8;
 int endtime = 18;
 
+
+//Max temperature and humidity
+
 float maxt = 25;
 float mint = 15;
 
 float maxh = 80;
 float minh = 60;
+
+
+//Max soundlevel
+
+float maxsound = 300;
+
 
 bool isF = false;
 
@@ -44,9 +53,10 @@ int h = 0;
 DHT dht(DHTPIN, DHTTYPE);
 
 
-void flash() {
-  
+//Sound sensor
+const int pinAdc = A1;
 
+void flash() { 
   
 
   if (h > starttime-1 && h < endtime+1)
@@ -54,10 +64,6 @@ void flash() {
       Serial.print("hej");  
 
   }
-  
- 
-  
-
 
 }
  
@@ -83,8 +89,37 @@ void setup()
 }
 
 
+void sendWarning()
+{
+
+  Serial.println("Sound is too loud!");
+
+}
+
+
 void loop()
 {  
+  
+
+    //Sound sensor ting
+    long sum = 0;
+    for(int i=0; i<32; i++)
+    {
+        sum += analogRead(pinAdc);
+    }
+
+    sum >>= 5;
+
+
+    if (sum > maxsound)
+    {      
+      delay(10);
+      sendWarning();
+
+    }      
+
+    
+    //Datetime ting
 
     DateTime now = rtc.now();
     sprintf(t, "%02d:%02d:%02d %02d/%02d/%02d", now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());  
