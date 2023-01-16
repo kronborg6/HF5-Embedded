@@ -53,16 +53,16 @@ func Setup(db *gorm.DB) {
 			Type: "Humidity",
 		},
 	}
-	// alarm := []Alarm{
-	// 	{
-	// 		LocalName: "DriveHus 2",
-	// 		TimeStamp: time.Now(),
-	// 		TypeId:    1,
-	// 		Value:     100,
-	// 	},
-	// }
+	alarm := []Alarm{
+		{
+			LocalId:   2,
+			TimeStamp: time.Now(),
+			TypeId:    1,
+			Value:     100,
+		},
+	}
 
 	db.Create(&startup)
-	// db.Create(&alarm)
 	db.Create(&types)
+	db.Create(&alarm)
 }

@@ -3,8 +3,8 @@ package models
 import "time"
 
 type Startup struct {
-	// Id            int       `json:"id" gorm:"primaryKey"`
-	Local         string    `json:"local" gorm:"primaryKey"`
+	Id            int       `json:"id" gorm:"primaryKey"`
+	Local         string    `json:"local" gorm:"unique"`
 	StartTime     time.Time `json:"start_time"`
 	EndTime       time.Time `json:"end_time"`
 	MinTemp       int       `json:"min_temp"`
