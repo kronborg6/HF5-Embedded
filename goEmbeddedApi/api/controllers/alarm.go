@@ -66,4 +66,5 @@ func RegisterAlarmController(db *gorm.DB, router fiber.Router) {
 
 	AlarmRouter.Get("/", controller.GetAll)
 	AlarmRouter.Get("/:id", controller.GetById)
+	AlarmRouter.Post("/", controller.Create)
 }

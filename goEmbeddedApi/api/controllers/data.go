@@ -64,4 +64,5 @@ func RegisterDataController(db *gorm.DB, router fiber.Router) {
 
 	DataRouter.Get("/", controller.GetAll)
 	DataRouter.Get("/:id", controller.GetById)
+	DataRouter.Post("/", controller.Create)
 }

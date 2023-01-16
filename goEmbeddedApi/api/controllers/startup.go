@@ -67,4 +67,5 @@ func RegisterStartupController(db *gorm.DB, router fiber.Router) {
 
 	StartupRouter.Get("/", controller.GetAll)
 	StartupRouter.Get("/:id", controller.GetById)
+	StartupRouter.Post("/", controller.Create)
 }
