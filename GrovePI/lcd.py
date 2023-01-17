@@ -161,7 +161,6 @@ def convert(c):
     
     return result
 
-
 setRGB(255,255,255)
 
 while True:
