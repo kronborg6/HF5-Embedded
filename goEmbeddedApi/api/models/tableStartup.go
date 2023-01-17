@@ -11,12 +11,14 @@ func Setup(db *gorm.DB) {
 		&Types{},
 		&Startup{},
 		&Data{},
+		&AlarmType{},
 		&Alarm{},
 	)
 	db.AutoMigrate(
 		&Types{},
 		&Startup{},
 		&Data{},
+		&AlarmType{},
 		&Alarm{},
 	)
 
@@ -53,16 +55,26 @@ func Setup(db *gorm.DB) {
 			Type: "Humidity",
 		},
 	}
+	alarmType := []AlarmType{
+		{
+			Name: "Warning",
+		},
+		{
+			Name: "NOOOOOOO",
+		},
+	}
 	alarm := []Alarm{
 		{
-			LocalId:   2,
-			TimeStamp: time.Now(),
-			TypeId:    1,
-			Value:     100,
+			LocalId:     2,
+			TimeStamp:   time.Now(),
+			AlarmTypeId: 1,
+			TypeId:      1,
+			Value:       100,
 		},
 	}
 
 	db.Create(&startup)
 	db.Create(&types)
+	db.Create(&alarmType)
 	db.Create(&alarm)
 }
