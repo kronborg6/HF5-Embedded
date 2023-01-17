@@ -65,8 +65,8 @@ func Setup(db *gorm.DB) {
 	}
 	alarm := []Alarm{
 		{
-			LocalId:     2,
-			TimeStamp:   time.Now(),
+			LocalId: 2,
+			// TimeStamp:   time.Now(),
 			AlarmTypeId: 1,
 			TypeId:      1,
 			Value:       100,

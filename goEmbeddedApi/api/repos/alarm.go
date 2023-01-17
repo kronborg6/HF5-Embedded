@@ -12,7 +12,11 @@ type AlarmRepo struct {
 func (repo *AlarmRepo) FindAll() ([]models.Alarm, error) {
 	var alarm []models.Alarm
 
-	if err := repo.db.Debug().Find(&alarm).Error; err != nil {
+	// if err := repo.db.Debug().Find(&alarm).Error; err != nil {
+	// 	return alarm, err
+	// }
+
+	if err := repo.db.Preload("Local").Preload("AlarmType").Preload("Type").Find(&alarm).Error; err != nil {
 		return alarm, err
 	}
 
@@ -22,7 +26,7 @@ func (repo *AlarmRepo) FindAll() ([]models.Alarm, error) {
 func (repo *AlarmRepo) FindByID(id int) (*[]models.Alarm, error) {
 	var alarm []models.Alarm
 
-	err := repo.db.Debug().Where("id = ?", id).Find(&alarm).Error
+	err := repo.db.Preload("Local").Preload("AlarmType").Preload("Type").Where("id = ?", id).Find(&alarm).Error
 
 	if err != nil {
 		return &alarm, err

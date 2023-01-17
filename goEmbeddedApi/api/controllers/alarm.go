@@ -48,6 +48,7 @@ func (controller *AlarmController) Create(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
+	// alarm.TimeStamp = time.Now()
 	if alarm, err = controller.repo.CreateAlarm(alarm); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
