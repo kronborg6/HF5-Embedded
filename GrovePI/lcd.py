@@ -1,7 +1,33 @@
 import time,sys
 import grovepi
 import math
+from datetime import datetime
+import threading
 
+
+
+#Soundsensorting
+sound_sensor = 0
+
+grovepi.pinMode(sound_sensor,"INPUT")
+
+threshold_value = 400
+
+#Data sender hver 15 min.
+def printit():  
+#900 er 15min
+  threading.Timer(5.0, printit).start() 
+  
+  print("sender data")
+
+printit()
+
+
+
+
+#Tidsperiode
+starttime = 8
+endtime = 18
 
 
 #Button ting
@@ -13,9 +39,6 @@ sensor = 4  # The Sensor goes on digital port 4.
 
 blue = 0
 white = 1   # The White colored sensor.
-
-t = 0
-h = 0
 
 maxtemp = 25
 mintemp = 18
@@ -138,7 +161,28 @@ def convert(c):
     
     return result
 
+
+setRGB(255,255,255)
+
 while True:
+    
+    
+    try:
+        # Read the sound level
+        sensor_value = grovepi.analogRead(sound_sensor)
+        # If loud, illuminate LED, otherwise dim
+        if sensor_value > threshold_value:        
+ 
+            print("Sound too loud")
+            time.sleep(.5)
+ 
+    except IOError:
+        print ("Error")
+        
+        
+    
+    now = datetime.now()
+    currenthour = now.strftime("%H")
     
     
     if grovepi.digitalRead(button) == 1:
@@ -157,26 +201,33 @@ while True:
         [temp,humidity] = grovepi.dht(sensor,blue)  
         if math.isnan(temp) == False and math.isnan(humidity) == False:
             #print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
-            if temp > 0 and humidity > 0:
+            if temp > 0 and humidity > 0:                
                 
+                now = datetime.now()
+                currenthour = now.strftime("%H")
+                currenthour = int(currenthour)
                 
-                fahrenheit = convert(temp)
-                
-                                
-                
-                hstring = str(humidity) + "% "
-                hstring = hstring + humstring(humidity)
-                
-                if f:
+                if currenthour < endtime and currenthour >= starttime:   
                     
-                    tstring = str(fahrenheit) + "F  " + tempstring(temp)    
-                    setText(tstring + " " + hstring)                    
-                   
+                    fahrenheit = convert(temp)
+                                    
                     
-                else:   
-                    tstring = str(temp) + "C  " + tempstring(temp)    
-                    setText(tstring + " " + hstring)      
-                
- 
+                    hstring = str(humidity) + "% "
+                    hstring = hstring + humstring(humidity)
+                    
+                    if f:
+                        
+                        tstring = str(fahrenheit) + "F  " + tempstring(temp)                        
+                        setText_norefresh(tstring + " " + hstring)
+                       
+                        
+                    else:   
+                        tstring = str(temp) + "C  " + tempstring(temp) 
+                        setText_norefresh(tstring + " " + hstring)
+                    
+                else:
+                     
+                    setRGB(0,0,0)
+                    setText("")
     except IOError:
         print ("Error")
