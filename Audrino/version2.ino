@@ -21,7 +21,6 @@ int endtime = 18;
 
 
 //Max temperature and humidity
-
 float maxt = 25;
 float mint = 15;
 
@@ -32,9 +31,7 @@ float minh = 60;
 float maxsound = 300;
 
 bool isF = false;
-
 const int buttonPin = 6;
-
 
 int h = 0;
 
@@ -66,18 +63,22 @@ void setup()
     lcd.begin(16, 2);
     lcd.setRGB(colorR, colorG, colorB);
 
-
     //Tidsting
     Wire.begin();
     rtc.begin();
     rtc.adjust(DateTime(F(__DATE__),F(__TIME__)));
-
     dht.begin();
 
     //900000ser
     MsTimer2::set(500, flash); // 500ms period
     MsTimer2::start();
 
+}
+
+void turnOffLCD()
+{
+    lcd.print("");
+    lcd.setRGB(0,0,0);  
 }
 
 
@@ -90,8 +91,7 @@ void sendWarning()
 
 
 void loop()
-{  
-  
+{    
 
     //Sound sensor ting
     long sum = 0;
@@ -137,8 +137,6 @@ void loop()
        }
               
        delay(500);
-
-
     }
  
 
@@ -252,13 +250,11 @@ void loop()
       
   }
   else
-  {
-    
-    lcd.print("");
-    lcd.setRGB(0,0,0);
+  {    
+   
+    turnOffLCD();
   
-  }
-    
+  }   
 
 
       
