@@ -40,6 +40,11 @@ func (repo *StartupRepo) CreateStartup(startup models.Startup) (models.Startup, 
 	return startup, nil
 }
 
+func (repo *StartupRepo) UpdateStartup(startup *models.Startup) (*[]models.Startup, error) {
+
+	return nil, nil
+}
+
 func NewStartupRepo(db *gorm.DB) *StartupRepo {
 	return &StartupRepo{db}
 }

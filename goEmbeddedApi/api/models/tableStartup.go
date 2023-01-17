@@ -72,9 +72,17 @@ func Setup(db *gorm.DB) {
 			Value:       100,
 		},
 	}
+	data := []Data{
+		{
+			LocalId: 1,
+			TypeId:  1,
+			Value:   25,
+		},
+	}
 
 	db.Create(&startup)
 	db.Create(&types)
+	db.Create(&data)
 	db.Create(&alarmType)
 	db.Create(&alarm)
 }
