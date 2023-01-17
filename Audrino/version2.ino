@@ -4,13 +4,8 @@
 RTC_DS3231 rtc;
 char t[32];
 
-
 //Tidstagning
 #include <MsTimer2.h> 
-
-
-
-
 
 #include <Wire.h>
 #include "rgb_lcd.h"
@@ -31,13 +26,10 @@ float maxt = 25;
 float mint = 15;
 
 float maxh = 80;
-float minh = 60;
-
+float minh = 60;  
 
 //Max soundlevel
-
 float maxsound = 300;
-
 
 bool isF = false;
 
@@ -122,18 +114,8 @@ void loop()
     //Datetime ting
 
     DateTime now = rtc.now();
-    sprintf(t, "%02d:%02d:%02d %02d/%02d/%02d", now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());  
-
-    
-    h = now.hour();
-
-    if (now.hour() > starttime-1 && now.hour() < endtime+1)
-    {
-        
-
-    }
-
-    
+    sprintf(t, "%02d:%02d:%02d %02d/%02d/%02d", now.hour(), now.minute(), now.second(), now.day(), now.month(), now.year());      
+    h = now.hour();    
 
     int digitalVal = digitalRead(buttonPin); // Take a reading
 
@@ -169,9 +151,12 @@ void loop()
     if (isnan(t) || isnan(h))
     {
         Serial.println("Failed to read from DHT");
-    }  
+    }    
+    
 
-
+  if (now.hour() > starttime-1 && now.hour() < endtime+1)
+  {
+      
   if (t > maxt)
   {
 
@@ -232,11 +217,9 @@ void loop()
       lcd.print("C");      
     }
 
-
     lcd.print(" Reg. temp");
 
   }
-
 
   if (h > maxh)
   {
@@ -258,16 +241,29 @@ void loop()
   }
 
   else
-  {
+    {
 
-    lcd.setCursor(0,1);
-    lcd.print(h);
-    lcd.print("%");
-    lcd.print(" Reg hum");
+      lcd.setCursor(0,1);
+      lcd.print(h);
+      lcd.print("%");
+      lcd.print(" Reg hum");
 
+    }
+      
   }
-
+  else
+  {
+    
+    lcd.print("");
+    lcd.setRGB(0,0,0);
   
+  }
+    
 
+
+      
 
 }
+
+
+  
