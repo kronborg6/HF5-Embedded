@@ -3,26 +3,74 @@ import grovepi
 import math
 from datetime import datetime
 import threading
+import requests
 
+#API-ting
 
+url = 'http://10.130.54.111:8080/'
+username = "Lort"
+password = "Password"
 
 #Soundsensorting
 sound_sensor = 0
-
 grovepi.pinMode(sound_sensor,"INPUT")
-
 threshold_value = 400
 
 #Data sender hver 15 min.
-def printit():  
+
+
+def startup():
+    
+    threading.Timer(1,startup).start()
+    response = requests.get(url + "startup/1",auth=(username, password))
+    data = response.json()
+    
+    
+    global max_temp
+    global min_temp
+    
+    dict = data[0]    
+    print(type(dict))
+    
+    _max_temp = dict["max_temp"]
+    _min_temp = dict["min_temp"]   
+    
+    max_temp = _max_temp
+    min_temp = _min_temp
+    
+    
+    
+startup()
+        
+    
+def resetter():
+    
+    threading.Timer(1800,resetter).start()
+    global wasSent
+    wasSent = False      
+
+resetter()   
+
+
+
+global _temp
+global _hum
+
+_temp = 0.0
+_hum = 0.0
+
+
+def senddata():  
 #900 er 15min
-  threading.Timer(5.0, printit).start() 
+    threading.Timer(5.0, senddata).start()  
+      
+    myobj = {"local_id": 1,"hum" : _hum,"temp" : _temp}
+    response = requests.post(url + "data",json=myobj,auth=(username, password)) 
+    print(response.status_code)
   
-  print("sender data")
+    
 
-printit()
-
-
+senddata()
 
 
 #Tidsperiode
@@ -40,14 +88,20 @@ sensor = 4  # The Sensor goes on digital port 4.
 blue = 0
 white = 1   # The White colored sensor.
 
-maxtemp = 25
+
+
+global maxtemp
+maxtemp = 20
+global mintemp
 mintemp = 18
 
+global maxhum
 maxhum = 80
+global minhum
 minhum = 60
 
 
-f = True
+f = False
 
 string = ""
  
@@ -124,29 +178,60 @@ def setText_norefresh(text):
             if c == '\n':
                 continue
         count += 1
-        bus.write_byte_data(DISPLAY_TEXT_ADDR,0x40,ord(c))
- 
-# example code
+        bus.write_byte_data(DISPLAY_TEXT_ADDR,0x40,ord(c)) 
+
+
+
+def post(alarm_type_id,type_id,value):    
+    
+    
+    global wasSent
+    
+   
+    if wasSent == False: 
+
+        
+        myobj = {"local_id": 1,
+             "alarm_type_id" : alarm_type_id,
+             "type_id" : type_id,
+             "value" : value
+             }        
+
+        response = requests.post(url + "alarm",json=myobj,auth=(username, password))        
+
+
+        print(response.status_code)
+        wasSent = True
+               
 
 
 def tempstring(temp):
     
     result = ""
     
-    if temp > 25:
+    
+    print("HEJ" + str(max_temp))
+   
+    if temp > maxtemp:
+        
+        post(2,2,temp)    
         return "High temp"
-    elif temp < 18:
+    
+    elif temp < mintemp:
+        post(1,2, temp)
         return "Low temp"
-    else:
+    else:        
         return "Reg temp"
 
 def humstring(hum):
     
     result = ""
     
-    if hum > 80:
+    if hum > maxhum:
+        post(2,3,hum)
         return "High hum"
-    elif hum < 60:
+    elif hum < minhum:
+        post(1,3,hum)
         return "Low hum"
     else:
         return "Reg hum"
@@ -154,16 +239,16 @@ def humstring(hum):
 
 def convert(c):
     
-    x = (c * 1.8) + 32
-    
-    result = float("{:.2f}".format(x))    
-    
+    x = (c * 1.8) + 32    
+    result = float("{:.2f}".format(x))        
     
     return result
 
 setRGB(255,255,255)
 
 while True:
+    
+    
     
     
     try:
@@ -196,36 +281,52 @@ while True:
         print(f)
         time.sleep(0.5)    
     
+
+
     try: 
-        [temp,humidity] = grovepi.dht(sensor,blue)  
+
+        #Sætter temp og humidity fra hardwaren, kan den ikke registrere hardwaren springer programmet til except.
+        [temp,humidity] = grovepi.dht(sensor,blue)
+        
+        global _temp
+        global _hum
+        
+       
+        
         if math.isnan(temp) == False and math.isnan(humidity) == False:
-            #print("temp = %.02f C humidity =%.02f%%"%(temp, humidity))
-            if temp > 0 and humidity > 0:                
+        
+            
+            #Tjekker om temperaturen og luftfugtigheden er over 0
+            if temp > 0 and humidity > 0:
+                
+                _temp = temp
+                _hum = humidity
                 
                 now = datetime.now()
                 currenthour = now.strftime("%H")
                 currenthour = int(currenthour)
                 
-                if currenthour < endtime and currenthour >= starttime:   
+                #Tjekker om nuværende tidspunkt er inden for tidsperioden
+                if currenthour < endtime and currenthour >= starttime:    
                     
-                    fahrenheit = convert(temp)
-                                    
-                    
+                    #Sætter fahrenheit variablen vha. convert funktionen.
+                    fahrenheit = convert(temp)    
+
+                    #Sætter hsttring til at være humidity + %                       
                     hstring = str(humidity) + "% "
+                    #Bagefter bliver humstring tilføjet vha. af humstring funktionen. Humstring funktionen tilføjer advarsler til stringen som f.eks high temp osv.
                     hstring = hstring + humstring(humidity)
                     
-                    if f:
-                        
+                    #Hvis fahrenheit er True udskriver skærmen den passende string.
+                    if f:                        
                         tstring = str(fahrenheit) + "F  " + tempstring(temp)                        
-                        setText_norefresh(tstring + " " + hstring)
-                       
-                        
+                        setText_norefresh(tstring + " " + hstring)      
                     else:   
                         tstring = str(temp) + "C  " + tempstring(temp) 
                         setText_norefresh(tstring + " " + hstring)
-                    
                 else:
-                     
+                    
+                    #Er skærmen ude for tidsperioden slukkes skærmen
                     setRGB(0,0,0)
                     setText("")
     except IOError:
