@@ -40,9 +40,15 @@ func (repo *StartupRepo) CreateStartup(startup models.Startup) (models.Startup, 
 	return startup, nil
 }
 
-func (repo *StartupRepo) UpdateStartup(startup *models.Startup) (*[]models.Startup, error) {
+func (repo *StartupRepo) UpdateStartup(startup models.Startup) (models.Startup, error) {
 
-	return nil, nil
+	// err := repo.db.Debug().Where("id = 1").Update(&startup).Error
+	err := repo.db.Model(&startup).Where("id = 1").Updates(&startup).Error
+	if err != nil {
+		return startup, err
+	}
+
+	return startup, nil
 }
 
 func NewStartupRepo(db *gorm.DB) *StartupRepo {

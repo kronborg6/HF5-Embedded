@@ -55,6 +55,21 @@ func (controller *StartupController) Create(c *fiber.Ctx) error {
 	return c.JSON(startup)
 }
 
+func (controller *StartupController) Update(c *fiber.Ctx) error {
+	var startup models.Startup
+	var err error
+	// id, _ := strconv.Atoi(c.Params("id"))
+
+	if err = c.BodyParser(&startup); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+	if startup, err = controller.repo.UpdateStartup(startup); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(startup)
+}
+
 func NewStartupController(repo *repos.StartupRepo) *StartupController {
 	return &StartupController{repo}
 }
@@ -68,4 +83,5 @@ func RegisterStartupController(db *gorm.DB, router fiber.Router) {
 	StartupRouter.Get("/", controller.GetAll)
 	StartupRouter.Get("/:id", controller.GetById)
 	StartupRouter.Post("/", controller.Create)
+	StartupRouter.Put("/", controller.Update)
 }
