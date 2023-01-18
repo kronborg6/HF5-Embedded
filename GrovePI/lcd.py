@@ -29,14 +29,29 @@ def startup():
     global max_temp
     global min_temp
     
-    dict = data[0]    
-    print(type(dict))
+    global max_hum
+    global min_hum
     
+    dict = data[0]   
+    
+    
+    #TEMP    
     _max_temp = dict["max_temp"]
     _min_temp = dict["min_temp"]   
     
     max_temp = _max_temp
     min_temp = _min_temp
+    
+    
+    #HUM
+    _max_hum = dict["max_hum"]
+    _min_hum = dict["min_hum"]   
+    
+    max_hum = _max_hum
+    min_hum = _min_hum
+    
+
+    
     
     
     
@@ -210,14 +225,13 @@ def tempstring(temp):
     result = ""
     
     
-    print("HEJ" + str(max_temp))
-   
-    if temp > maxtemp:
+       
+    if temp > max_temp:
         
         post(2,2,temp)    
         return "High temp"
     
-    elif temp < mintemp:
+    elif temp < min_temp:
         post(1,2, temp)
         return "Low temp"
     else:        
@@ -227,10 +241,10 @@ def humstring(hum):
     
     result = ""
     
-    if hum > maxhum:
+    if hum > max_hum:
         post(2,3,hum)
         return "High hum"
-    elif hum < minhum:
+    elif hum < min_hum:
         post(1,3,hum)
         return "Low hum"
     else:
