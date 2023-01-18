@@ -12,7 +12,7 @@ type Alarm struct {
 	AlarmType   AlarmType `gorm:"foreignKey:AlarmTypeId"`
 	TypeId      int       `json:"type_id"`
 	Type        Types     `gorm:"foreignKey:TypeId"`
-	Value       int       `json:"value"`
+	Value       float64   `json:"value"`
 	CreatedAt   time.Time `gorm:"type:DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP" faker:"-"`
 }
 

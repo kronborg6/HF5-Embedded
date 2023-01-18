@@ -60,7 +60,7 @@ func Setup(db *gorm.DB) {
 			Name: "Warning",
 		},
 		{
-			Name: "NOOOOOOO",
+			Name: "Alarm",
 		},
 	}
 	alarm := []Alarm{

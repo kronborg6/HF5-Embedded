@@ -12,7 +12,7 @@ type DataRepo struct {
 func (repo *DataRepo) FindAll() ([]models.Data, error) {
 	var data []models.Data
 
-	if err := repo.db.Debug().Find(&data).Error; err != nil {
+	if err := repo.db.Debug().Preload("Type").Find(&data).Error; err != nil {
 		return data, err
 	}
 	return data, nil
@@ -21,7 +21,7 @@ func (repo *DataRepo) FindAll() ([]models.Data, error) {
 func (repo *DataRepo) FindByID(id int) (*[]models.Data, error) {
 	var data []models.Data
 
-	err := repo.db.Debug().Where("id = ?", id).Find(&data).Error
+	err := repo.db.Debug().Preload("Type").Where("id = ?", id).Find(&data).Error
 
 	if err != nil {
 		return &data, err
