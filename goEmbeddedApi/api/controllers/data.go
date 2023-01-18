@@ -52,6 +52,10 @@ func (controller *DataController) Create(c *fiber.Ctx) error {
 	return c.JSON(data)
 }
 
+func (controller *DataController) Delete(c *fiber.Ctx) error {
+	return nil
+}
+
 func NewDataController(repo *repos.DataRepo) *DataController {
 	return &DataController{repo}
 }
@@ -65,4 +69,5 @@ func RegisterDataController(db *gorm.DB, router fiber.Router) {
 	DataRouter.Get("/", controller.GetAll)
 	DataRouter.Get("/:id", controller.GetById)
 	DataRouter.Post("/", controller.Create)
+
 }

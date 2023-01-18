@@ -39,6 +39,16 @@ func (repo *DataRepo) CreateData(data models.Data) (models.Data, error) {
 
 	return data, nil
 }
+func (repo *DataRepo) DeleteData(data models.Data) error {
+
+	err := repo.db.Debug().Delete(&data).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func NewDataRepo(db *gorm.DB) *DataRepo {
 	return &DataRepo{db}
