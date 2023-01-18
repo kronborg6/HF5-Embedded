@@ -27,8 +27,8 @@ func Setup(db *gorm.DB) {
 			EndTime:       18,
 			MinTemp:       5,
 			MaxTemp:       100,
-			MinHumidity:   10,
-			MaxHumidity:   20,
+			MinHum:        10,
+			MaxHum:        20,
 			MaxNoiseLevel: 75,
 		},
 		{
@@ -37,8 +37,8 @@ func Setup(db *gorm.DB) {
 			EndTime:       16,
 			MinTemp:       5,
 			MaxTemp:       15,
-			MinHumidity:   10,
-			MaxHumidity:   20,
+			MinHum:        10,
+			MaxHum:        20,
 			MaxNoiseLevel: 75,
 		},
 	}

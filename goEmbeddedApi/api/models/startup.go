@@ -7,7 +7,7 @@ type Startup struct {
 	EndTime       int    `json:"end_time"`
 	MinTemp       int    `json:"min_temp"`
 	MaxTemp       int    `json:"max_temp"`
-	MinHumidity   int    `json:"min_humidity"`
-	MaxHumidity   int    `json:"max_humidty"`
+	MinHum        int    `json:"min_hum"`
+	MaxHum        int    `json:"max_hum"`
 	MaxNoiseLevel int    `json:"max_noise_level"`
 }
