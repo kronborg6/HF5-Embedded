@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -25,18 +23,18 @@ func Setup(db *gorm.DB) {
 	startup := []Startup{
 		{
 			Local:         "Drivehus 1",
-			StartTime:     time.Now(),
-			EndTime:       time.Now(),
+			StartTime:     8,
+			EndTime:       18,
 			MinTemp:       5,
-			MaxTemp:       15,
+			MaxTemp:       100,
 			MinHumidity:   10,
 			MaxHumidity:   20,
 			MaxNoiseLevel: 75,
 		},
 		{
 			Local:         "Drivehus 2",
-			StartTime:     time.Now(),
-			EndTime:       time.Now(),
+			StartTime:     8,
+			EndTime:       16,
 			MinTemp:       5,
 			MaxTemp:       15,
 			MinHumidity:   10,
@@ -75,8 +73,10 @@ func Setup(db *gorm.DB) {
 	data := []Data{
 		{
 			LocalId: 1,
-			TypeId:  1,
-			Value:   25,
+			// TypeId:  1,
+			// Value:   25,
+			Temp: 21.2,
+			Hum:  15.2,
 		},
 	}
 

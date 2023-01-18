@@ -9,7 +9,9 @@ type Data struct {
 	// Local     string    `json:"local"`
 	CreatedAt time.Time `gorm:"type:DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP" faker:"-"`
 	// TimeStamp time.Time `json:"time_stamp"`
-	TypeId int     `json:"type_id"`
-	Type   Types   `gorm:"foreignKey:TypeId"`
-	Value  float64 `json:"value"`
+	// TypeId int     `json:"type_id"`
+	// Type   Types   `gorm:"foreignKey:TypeId"`
+	Hum  float64 `json:"hum"`
+	Temp float64 `json:"Temp"`
+	// Value  float64 `json:"value"`
 }
