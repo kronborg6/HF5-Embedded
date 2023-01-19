@@ -12,7 +12,7 @@ type DataRepo struct {
 func (repo *DataRepo) FindAll() ([]models.Data, error) {
 	var data []models.Data
 
-	if err := repo.db.Debug().Preload("Type").Find(&data).Error; err != nil {
+	if err := repo.db.Debug().Preload("Local").Find(&data).Error; err != nil {
 		return data, err
 	}
 	return data, nil
