@@ -1,5 +1,6 @@
 package models
 
+// here we have a the Starup model that the orm use to create a startup table
 type Startup struct {
 	Id            int    `json:"id" gorm:"primaryKey"`
 	Local         string `json:"local" gorm:"unique"`

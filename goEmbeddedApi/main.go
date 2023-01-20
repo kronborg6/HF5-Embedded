@@ -12,31 +12,32 @@ import (
 )
 
 func main() {
+	// start the databae conniton
 	db := db.Init()
+	// make's a new api
 	app := fiber.New()
-
+	// startup off models
 	models.Setup(db)
-
-	// fmt.Println(db)
-
+	// log's the all the req
 	app.Use(logger.New())
-
-	app.Get("/lol", func(c *fiber.Ctx) error {
+	// a endpoint test
+	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
-			"message": "can't find data by ID",
-			"Nej":     "Hej",
+			"message": "this is a endpoint test",
+			"test":    "Test",
 		})
 	})
+	// setup of basic auth
 	app.Use(basicauth.New(basicauth.Config{
 		Users: map[string]string{
-			"Lort": "Password",
+			"Admin": "Password",
 		},
 	}))
-
+	// tells what the endpoint is
 	api := app.Group("/")
 	controllers.RegisterStartupController(db, api)
 	controllers.RegisterAlarmController(db, api)
 	controllers.RegisterDataController(db, api)
+	// listen to port 8080 for the api
 	log.Fatal(app.Listen(":8080"))
-	// app.Listen(":8080")
 }
