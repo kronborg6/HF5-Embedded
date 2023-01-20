@@ -20,6 +20,10 @@ int starttime = 8;
 int endtime = 18;
 
 
+float _h;
+float _t;
+float _f;
+
 //Max temperature and humidity
 float maxt = 25;
 float mint = 15;
@@ -48,10 +52,14 @@ const int pinAdc = A1;
 void flash() { 
   
 
+  
+
   if (h > starttime-1 && h < endtime+1)
   {
-      Serial.print("hej");  
-
+       
+      //startpost(_t,_f);
+      
+  
   }
 
 }
@@ -70,7 +78,7 @@ void setup()
     dht.begin();
 
     //900000ser
-    MsTimer2::set(500, flash); // 500ms period
+    MsTimer2::set(2000, flash); // 500ms period
     MsTimer2::start();
 
 }
@@ -85,7 +93,7 @@ void turnOffLCD()
 void sendWarning()
 {
 
-  Serial.println("Sound is too loud!");
+  //Serial.println("Sound is too loud!");
 
 }
 
@@ -119,6 +127,20 @@ void loop()
 
     int digitalVal = digitalRead(buttonPin); // Take a reading
 
+
+
+    
+    float h = dht.readHumidity();
+    float t = dht.readTemperature();
+    float f = dht.readTemperature(true);
+
+
+
+
+    _t = t;
+    _h = h;        
+ 
+
     if(HIGH == digitalVal)
     {
        Serial.println("ON");
@@ -141,10 +163,6 @@ void loop()
  
 
 
-    float h = dht.readHumidity();
-    float t = dht.readTemperature();
-    float f = dht.readTemperature(true);
- 
 
     if (isnan(t) || isnan(h))
     {
