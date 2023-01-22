@@ -73,7 +73,7 @@ func (controller *StartupController) Update(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	// here it send the body data to repo if not it give's a error
-	if startup, err = controller.repo.UpdateStartup(startup); err != nil {
+	if startup, err = controller.repo.UpdateStartup(1, startup); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	// here it retun the model
