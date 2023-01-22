@@ -1,12 +1,13 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/controllers"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/db"
+	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/middleware"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/models"
 )
 
@@ -27,10 +28,13 @@ func main() {
 		})
 	})
 
+	fmt.Println(middleware.Encode("Kronborg"))
+	fmt.Println(middleware.Dcode("S3JvbmJvcmc="))
+
 	api := app.Group("/")
 
 	controllers.RegisterDataController(db, api)
 
-	log.Fatal(app.Listen(":8000"))
+	// log.Fatal(app.Listen(":8000"))
 
 }
