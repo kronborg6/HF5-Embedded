@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/controllers"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/db"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/models"
 )
@@ -25,6 +26,10 @@ func main() {
 			"test":    "Test",
 		})
 	})
+
+	api := app.Group("/")
+
+	controllers.RegisterDataController(db, api)
 
 	log.Fatal(app.Listen(":8000"))
 
