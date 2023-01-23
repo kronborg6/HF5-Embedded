@@ -1,14 +1,24 @@
 from django.shortcuts import render
 
+
+import requests
+
 # Create your views here.
 
 
 
 def index (request):
 
+
+
+
     
 
     return render(request, "hf5/index.html",{
+
+
+
+
 
         
 
@@ -19,6 +29,10 @@ def index (request):
 
 
 def hej(request,name):
+
+
+
+
     
 
     return render(request, "hf5/hej.html",{

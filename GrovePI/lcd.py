@@ -8,7 +8,7 @@ import requests
 #API-ting
 
 url = 'http://10.130.54.111:8080/'
-username = "Lort"
+username = "Admin"
 password = "Password"
 
 #Soundsensorting
