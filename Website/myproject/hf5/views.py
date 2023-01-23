@@ -1,9 +1,15 @@
 from django.shortcuts import render
 
-
 import requests
+from django.shortcuts import redirect
 
-# Create your views here.
+
+
+
+#API-ting
+url = 'http://10.130.54.111:8080/'
+username = "Admin"
+password = "Password"
 
 
 
@@ -11,33 +17,28 @@ def index (request):
 
 
 
+    response = requests.get(url + "data",auth=(username, password))
+    data = response.json()  
+
+
+    device = request.GET.get("page") 
 
     
+   
 
-    return render(request, "hf5/index.html",{
+    return render(request, "hf5/index.html",{       
 
-
-
-
-
-        
-
-
+        "data" : data
         
       
     })
 
 
-def hej(request,name):
-
-
-
-
+def warnings(request):
     
 
-    return render(request, "hf5/hej.html",{
+    return render(request, "hf5/warnings.html",{
 
-
-        "name" : name
-
+        
+        
     })

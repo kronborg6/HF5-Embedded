@@ -1,1 +1,27 @@
-<h1>Test</h1>
+
+{% extends "hf5/layout.html" %}
+
+{% block body%}
+
+<h1>Data</h1>
+
+
+
+<button class="btn btn-primary">Drivhus 1</button>   
+<button class="btn btn-primary">Drivhus 2</button>   
+<button class="btn btn-primary">Alle drivhus</button>   
+
+
+
+<ul>
+{% for dict in data %}    
+
+
+
+<li>Device-ID: {{dict.Local.id}} Temperature: {{dict.temp}} Humidity: {{dict.hum}} Time: {{dict.CreatedAt}} </li>
+
+
+{% endfor %}
+</ul>
+
+{% endblock %}
