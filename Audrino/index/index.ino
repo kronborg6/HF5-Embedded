@@ -66,7 +66,7 @@ void flash() {
   {
        
     //startpost(_t,_f);
-    startget();
+    startget();  
       
   
   }
@@ -77,7 +77,7 @@ void setup()
 {
 
 
-  
+
     Serial.begin(9600);
     pinMode(buttonPin,INPUT_PULLUP);
     lcd.begin(16, 2);
@@ -89,15 +89,24 @@ void setup()
     rtc.adjust(DateTime(F(__DATE__),F(__TIME__)));
     dht.begin();
 
+
+    startget();
+
+    
     //900000ser
-    MsTimer2::set(2000, flash); // 500ms period
+    MsTimer2::set(30000, flash); // 500ms period
     MsTimer2::start();
+
+    
 
 }
 
 void turnOffLCD()
 {
-    lcd.print("");
+    lcd.setCursor(0,0);  
+    lcd.print("                                  ");
+    lcd.setCursor(0,1);    
+    lcd.print("                                  ");
     lcd.setRGB(0,0,0);  
 }
 
@@ -156,6 +165,7 @@ void loop()
     if(HIGH == digitalVal)
     {
        Serial.println("ON");
+    
 
        if (isF == true)
        {
