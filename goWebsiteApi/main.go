@@ -29,7 +29,7 @@ func main() {
 	})
 
 	fmt.Println(middleware.Encode("Kronborg"))
-	fmt.Println(middleware.Dcode("S3JvbmJvcmc="))
+	fmt.Println(middleware.Dcode("a3JvbmJvcmc="))
 
 	api := app.Group("/")
 
