@@ -9,7 +9,7 @@ type DataRepo struct {
 	db *gorm.DB
 }
 
-func (repo *DataRepo) FindAllDta() ([]models.Data, error) {
+func (repo *DataRepo) FindAllData() ([]models.Data, error) {
 	var data []models.Data
 
 	if err := repo.db.Debug().Preload("Local").Find(&data).Error; err != nil {

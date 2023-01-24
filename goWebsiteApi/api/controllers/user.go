@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/middleware"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/models"
@@ -16,7 +17,7 @@ type UserController struct {
 	repo *repos.UserRepo
 }
 
-func (controller *UserController) test(c *fiber.Ctx) error {
+func (controller *UserController) login(c *fiber.Ctx) error {
 	var user models.User
 
 	if err := c.BodyParser(&user); err != nil {
@@ -50,7 +51,7 @@ func (controller *UserController) test(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"token": t})
 }
 
-func (controller *UserController) login(c *fiber.Ctx) error {
+func (controller *UserController) test(c *fiber.Ctx) error {
 	username := c.FormValue("pass")
 	var user models.User
 
@@ -82,5 +83,10 @@ func RegisterUserController(db *gorm.DB, router fiber.Router) {
 	UserRouter := router.Group("/user")
 
 	UserRouter.Post("/login", controller.login)
+
+	UserRouter.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte("secret"),
+	}))
+
 	UserRouter.Post("/", controller.test)
 }

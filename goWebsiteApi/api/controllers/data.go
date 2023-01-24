@@ -11,7 +11,7 @@ type DataController struct {
 }
 
 func (controller *DataController) GetAll(c *fiber.Ctx) error {
-	data, err := controller.repo.FindAllDta()
+	data, err := controller.repo.FindAllData()
 
 	if err != nil {
 		return c.JSON(fiber.Map{

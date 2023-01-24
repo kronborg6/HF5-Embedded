@@ -62,6 +62,8 @@ func main() {
 	// api := app.Group("/")
 
 	controllers.RegisterDataController(db, api)
+	controllers.RegisterAlarmController(db, api)
+	controllers.RegisterStartupController(db, api)
 
 	log.Fatal(app.Listen(":8000"))
 
