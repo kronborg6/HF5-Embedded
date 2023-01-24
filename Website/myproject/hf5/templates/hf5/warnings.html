@@ -7,6 +7,7 @@
 {% block body%}
 
 
+
 <script src="{% static 'index.js' %}"></script>
 
 
@@ -35,7 +36,7 @@
 
 
 
- {% for item in data %}
+ {% for item in page.object_list %}
 
 
  {% if item.Local.id == device or device == 0 or device == None%}
@@ -45,7 +46,20 @@
 
  {% endfor %}
 
+
 </ul>
+
+<footer>
+
+    {% if page.has_previous %}
+    <a id="previous" data-page="{{page.previous_page_number}}" class="btn next-previous btn-secondary">Previous</a>
+    {% endif %}
+    {% if page.has_next %}
+    <a id="next" data-page="{{page.next_page_number}}" class="btn next-previous btn-primary">Next</a>
+    {% endif %}
+
+</footer>
+
 
 
 {% endblock %}

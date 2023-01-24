@@ -40,15 +40,31 @@ def index (request):
     if device:
         device = int(device)    
     else:
-        device = 0        
-   
-   
+        device = 0            
 
+    _data = list()    
+
+    for index, item in enumerate(data):
+
+        if item["local_id"] == device:
+
+            _data.append(item)        
+
+        elif device == 0:
+
+            _data.append(item)
+    
+
+
+    data_paginator = Paginator(_data, 9)       
+    page_number = request.GET.get("page") 
+    page = data_paginator.get_page(page_number)     
 
 
     return render(request, "hf5/index.html",{       
 
         "data" : data,
+        "page" : page,
         "device" : device      
         
       
@@ -74,13 +90,38 @@ def warnings(request):
     if device:
         device = int(device)    
     else:
-        device = 0        
+        device = 0       
+
+
+    _data = list()
+
+    for index, item in enumerate(data):
+
+        if item["local_id"] == device:
+
+            _data.append(item)        
+
+        elif device == 0:
+
+            _data.append(item)
+
+
+
+
+    data_paginator = Paginator(_data, 9)       
+    page_number = request.GET.get("page") 
+    page = data_paginator.get_page(page_number)   
+
+
+
+
 
 
     return render(request, "hf5/warnings.html",{
 
         "data" : data,
-        "device" : device
+        "device" : device,
+        "page" : page
         
         
     })
@@ -125,8 +166,6 @@ def startup(request):
         data = response.json()    
 
 
-       
-
     
 
         if request.method == "POST":
@@ -145,9 +184,6 @@ def startup(request):
                 max_hum = form.cleaned_data["max_hum"]
                 min_hum = form.cleaned_data["min_hum"]
                 max_noise_level = form.cleaned_data["max_noise_level"]
-
-
-
                 
 
             
@@ -184,15 +220,7 @@ def startup(request):
             if max_noise_level == "":
                 max_noise_level = data[int(id) -1]["max_noise_level"]
             else:
-                max_noise_level = int(max_noise_level)
-
-  
-
-
-              
-            
-            
-                
+                max_noise_level = int(max_noise_level)                
                
 
 
@@ -227,7 +255,7 @@ def logout(request):
 
 
     request.session['token'] = ""
-    print("lort")
+   
 
     return HttpResponseRedirect(reverse("login"))  
 
