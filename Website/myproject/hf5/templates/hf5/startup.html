@@ -1,0 +1,87 @@
+
+{% extends "hf5/layout.html" %}
+{% load static %}
+
+
+
+{% block body%}
+
+
+<h1>Startup</h1>
+
+<ul>
+
+
+<div class="row">
+
+<div class="col-6">
+    
+{% for item in data %}
+
+    {% if item.id == 1%}
+    <li>Drivhus: {{item.id}} </li>
+    <li>Start-time: {{item.start_time}}</li>
+    <li>End-time: {{item.end_time}}</li>
+    <li>Max-temp: {{item.max_temp}}</li>
+    <li>Min-temp: {{item.min_temp}}</li>
+    <li>Max-hum: {{item.max_hum}}</li>
+    <li>Min-hum: {{item.min_hum}}</li>
+    <li>Max sound level: {{item.max_noise_level}}</li>
+    
+    {% endif %}
+{% endfor %}
+
+</div>
+
+<div class="col-6">
+
+{% for item in data %}
+
+    {% if item.id == 2%}
+    <li>Drivhus: {{item.id}} </li>
+    <li>Start-time: {{item.start_time}}</li>
+    <li>End-time: {{item.end_time}}</li>
+    <li>Max-temp: {{item.max_temp}}</li>
+    <li>Min-temp: {{item.min_temp}}</li>
+    <li>Max-hum: {{item.max_hum}}</li>
+    <li>Min-hum: {{item.min_hum}}</li>
+    <li>Max sound level: {{item.max_noise_level}}</li>
+
+    {% endif %}
+
+
+{% endfor %}
+
+
+</div>
+
+</div>
+
+
+{% if data != ""%}
+
+<h3 style="color: red;">{{message}}</h3>
+    <form action="{% url 'startup'  %}" method="POST">
+        {% csrf_token %}
+        <p>{{form.id.label}} {{form.id}}</p>        
+        <p>{{form.start_time.label}} {{form.start_time}}</p>
+        <p>{{form.end_time.label}} {{form.end_time}}</p>
+        <p>{{form.max_temp.label}} {{form.max_temp}}</p>
+        <p>{{form.min_temp.label}} {{form.min_temp}}</p>
+        <p>{{form.max_hum.label}} {{form.max_hum}}</p>
+        <p>{{form.min_hum.label}} {{form.min_hum}}</p>
+        <p>{{form.max_noise_level.label}} {{form.max_noise_level}}</p>
+
+
+
+
+        <br><br>
+        <input type="submit" value="Save">
+    </form>
+{% endif %}
+
+</ul>
+
+
+
+{% endblock %}
