@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/middleware"
@@ -18,6 +19,8 @@ type UserController struct {
 }
 
 func (controller *UserController) login(c *fiber.Ctx) error {
+	store := session.New()
+	sess, err := store.Get(c)
 	var user models.User
 
 	if err := c.BodyParser(&user); err != nil {
@@ -47,6 +50,10 @@ func (controller *UserController) login(c *fiber.Ctx) error {
 	t, err := token.SignedString([]byte("secret"))
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	sess.Set("token", t)
+	if err := sess.Save(); err != nil {
+		panic(err)
 	}
 	return c.JSON(fiber.Map{"token": t})
 }
