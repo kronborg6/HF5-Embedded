@@ -14,14 +14,16 @@ password = "Password"
 #Soundsensorting
 sound_sensor = 0
 grovepi.pinMode(sound_sensor,"INPUT")
-threshold_value = 400
+
+
+
 
 #Data sender hver 15 min.
 
 
 def startup():
     
-    threading.Timer(1,startup).start()
+    threading.Timer(10,startup).start()
     response = requests.get(url + "startup/1",auth=(username, password))
     data = response.json()
     
@@ -30,10 +32,17 @@ def startup():
     global min_temp
     
     global max_hum
-    global min_hum
+    global min_hum    
     
-    dict = data[0]   
+    global threshold_value
     
+    
+    #Tidsperiode
+    global starttime
+    global endtime
+        
+    
+    dict = data[0]       
     
     #TEMP    
     _max_temp = dict["max_temp"]
@@ -50,16 +59,22 @@ def startup():
     max_hum = _max_hum
     min_hum = _min_hum
     
-
     
+    #START&ENDTIME
     
+    starttime = dict["start_time"]
+    endtime = dict["end_time"]
+    
+    #SOUND       
+    _max_noise_level = dict["max_noise_level"]    
+    threshold_value = _max_noise_level       
     
     
 startup()
         
     
 def resetter():
-    
+    #1800
     threading.Timer(1800,resetter).start()
     global wasSent
     wasSent = False      
@@ -77,7 +92,7 @@ _hum = 0.0
 
 def senddata():  
 #900 er 15min
-    threading.Timer(5.0, senddata).start()  
+    threading.Timer(10.0, senddata).start()  
       
     myobj = {"local_id": 1,"hum" : _hum,"temp" : _temp}
     response = requests.post(url + "data",json=myobj,auth=(username, password)) 
@@ -88,9 +103,7 @@ def senddata():
 senddata()
 
 
-#Tidsperiode
-starttime = 8
-endtime = 18
+
 
 
 #Button ting
@@ -105,15 +118,8 @@ white = 1   # The White colored sensor.
 
 
 
-global maxtemp
-maxtemp = 20
-global mintemp
-mintemp = 18
 
-global maxhum
-maxhum = 80
-global minhum
-minhum = 60
+
 
 
 f = False
@@ -266,22 +272,49 @@ while True:
     
     
     try:
+        
+        
+          
+        now = datetime.now()
+        currenthour = now.strftime("%H")        
+        currenthour = now.strftime("%H")
+        currenthour = int(currenthour)
+        
+        
+        
         # Read the sound level
         sensor_value = grovepi.analogRead(sound_sensor)
         # If loud, illuminate LED, otherwise dim
-        if sensor_value > threshold_value:        
- 
-            print("Sound too loud")
-            time.sleep(.5)
+        
+        
+        
+        
+        
+        if sensor_value > threshold_value:
+            
+            if currenthour < endtime and currenthour >= starttime:
+            
+                                   
+                #SEND ADVARSEL, INDE FOR START OG SLUTTID
+                post(1,1, sensor_value)
+                print("Sound too loud, sending warning")   
+                
+                
+                
+            else:
+                
+                
+                #SEND ALARM, UDE FOR START OG SLUTTID
+                post(2,1, sensor_value)
+                print("Sound too loud, sending alarm")                
+                
+           
  
     except IOError:
         print ("Error")
         
         
-    
-    now = datetime.now()
-    currenthour = now.strftime("%H")
-    
+  
     
     if grovepi.digitalRead(button) == 1:
         
@@ -321,7 +354,9 @@ while True:
                 currenthour = int(currenthour)
                 
                 #Tjekker om nuværende tidspunkt er inden for tidsperioden
-                if currenthour < endtime and currenthour >= starttime:    
+                if currenthour < endtime and currenthour >= starttime:
+                    
+                    setRGB(255,255,255)
                     
                     #Sætter fahrenheit variablen vha. convert funktionen.
                     fahrenheit = convert(temp)    
