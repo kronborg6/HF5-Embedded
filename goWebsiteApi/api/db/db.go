@@ -13,7 +13,7 @@ func Init() *gorm.DB {
 	//	dsn := "kronborg:password@tcp(localhost:3306)/lol?charset=utf8mb4&parseTime=True&loc=Local" // Home Database
 	dsn := "root:Password@tcp(localhost:3306)/lol?charset=utf8mb4&parseTime=True&loc=Local" // Home Database
 
-	//	dsn := "root:Password@tcp(localhost:3306)/lol?charset=utf8mb4&parseTime=True&loc=Local" // connect to wsl mysql server
+	// dsn := "root:Password@tcp(localhost:3306)/lol?charset=utf8mb4&parseTime=True&loc=Local" // connect to wsl mysql server
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
