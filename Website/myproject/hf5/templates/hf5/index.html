@@ -1,27 +1,51 @@
 
 {% extends "hf5/layout.html" %}
+{% load static %}
+
+
 
 {% block body%}
 
-<h1>Data</h1>
+
+<script src="{% static 'index.js' %}"></script>
 
 
 
-<button class="btn btn-primary">Drivhus 1</button>   
-<button class="btn btn-primary">Drivhus 2</button>   
-<button class="btn btn-primary">Alle drivhus</button>   
+
+{% if device == 1 %}
+<button id="1" class="btn btn-secondary">Drivhus 1</button> 
+{% else %}
+<button id="1" class="btn btn-primary">Drivhus 1</button> 
+{% endif %}
+
+{% if device == 2 %}
+<button id="2" class="btn btn-secondary">Drivhus 2</button>   
+{% else %}
+<button id="2" class="btn btn-primary">Drivhus 2</button>   
+{% endif %}
+
+{% if device == 0 %}
+<button id="0" class="btn btn-secondary">Alle drivhus</button> 
+{% else %}
+<button id="0" class="btn btn-primary">Alle drivhus</button> 
+{% endif %}
+ 
 
 
 
 <ul>
-{% for dict in data %}    
+{% for dict in data %}   
 
 
-
-<li>Device-ID: {{dict.Local.id}} Temperature: {{dict.temp}} Humidity: {{dict.hum}} Time: {{dict.CreatedAt}} </li>
-
+    {% if dict.Local.id == device or device == 0 or device == None%}
+        <li>Drivhus: {{dict.Local.id}} Temperature: {{dict.temp}} Humidity: {{dict.hum}} Time: {{dict.CreatedAt}} </li>
+    {% endif %}
 
 {% endfor %}
+
 </ul>
+
+
+
 
 {% endblock %}
