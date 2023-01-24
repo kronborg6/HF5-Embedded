@@ -62,6 +62,12 @@ func (controller *StartupController) Create(c *fiber.Ctx) error {
 	// here it retun the model
 	return c.JSON(startup)
 }
+func Test(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{
+		"message": "Faild to fetch Users",
+		"error":   12,
+	})
+}
 
 // here we have the Update controller that take in a body that is a json body of startup model
 func (controller *StartupController) Update(c *fiber.Ctx) error {
