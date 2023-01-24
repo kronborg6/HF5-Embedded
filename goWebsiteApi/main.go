@@ -15,29 +15,15 @@ import (
 	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/models"
 )
 
-var (
-	// Obviously, this is just a test example. Do not do this in production.
-	// In production, you would have the private key and public key pair generated
-	// in advance. NEVER add a private key to any GitHub repo.
-	privateKey = "dfg"
-)
-
 func main() {
 	db := db.Init()
 	app := fiber.New()
 	models.Setup(db)
-	/*
-		app.Use(logger.New(logger.Config{
-			Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
-		})) */
+
 	app.Use(logger.New())
 
 	app.Get("/", func(c *fiber.Ctx) error {
 
-		/* 		return c.JSON(fiber.Map{
-			"message": "this is a endpoint test",
-			"test":    "Test",
-		}) */
 		claims := jwt.MapClaims{
 			"name":  "John Doe",
 			"admin": true,
@@ -56,6 +42,10 @@ func main() {
 		return c.JSON(fiber.Map{"token": t})
 	})
 
+	api := app.Group("/")
+
+	controllers.RegisterUserController(db, api)
+
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte("secret"),
 	}))
@@ -69,7 +59,7 @@ func main() {
 	fmt.Println(middleware.Encode("Kronborg"))
 	fmt.Println(middleware.Dcode("a3JvbmJvcmc="))
 
-	api := app.Group("/")
+	// api := app.Group("/")
 
 	controllers.RegisterDataController(db, api)
 
