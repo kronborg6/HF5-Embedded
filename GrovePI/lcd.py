@@ -75,7 +75,7 @@ startup()
     
 def resetter():
     #1800
-    threading.Timer(1800,resetter).start()
+    threading.Timer(15,resetter).start()
     global wasSent
     wasSent = False      
 
