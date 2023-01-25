@@ -1,3 +1,7 @@
+#include <ArduinoJson.h>
+#include <ArduinoJson.hpp>
+
+
 //Tidsting
 #include <RTClib.h>
 #include <Wire.h>
@@ -49,6 +53,10 @@ DHT dht(DHTPIN, DHTTYPE);
 //Sound sensor
 const int pinAdc = A1;
 
+
+
+
+
 void flash() { 
   
 
@@ -57,7 +65,8 @@ void flash() {
   if (h > starttime-1 && h < endtime+1)
   {
        
-      //startpost(_t,_f);
+    //startpost(_t,_f);
+    startget();
       
   
   }
@@ -66,6 +75,9 @@ void flash() {
  
 void setup()
 {
+
+
+  
     Serial.begin(9600);
     pinMode(buttonPin,INPUT_PULLUP);
     lcd.begin(16, 2);

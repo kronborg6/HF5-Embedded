@@ -1,14 +1,15 @@
 #include <SPI.h>
 #include <Ethernet.h>
+#include <Arduino_JSON.h>
 
 byte mac[] = { 0xA8, 0x61, 0x0A, 0xAE, 0x98, 0x02 }; // MAC address of 
 
 EthernetClient client;
 
 int    HTTP_PORT   = 8080;
-String HTTP_METHOD = "GET"; // or POST
+String HTTP_METHOD = "GET";
 char   HOST_NAME[] = "10.130.54.111";
-String PATH_NAME   = "/lol";
+String PATH_NAME   = "/startup/1";
 
 
 
@@ -31,14 +32,33 @@ void startget() {
     // send HTTP header
     client.println(HTTP_METHOD + " " + PATH_NAME + " HTTP/1.1");
     client.println("Host: " + String(HOST_NAME));
+    client.println("Authorization: Basic QWRtaW46UGFzc3dvcmQ=");
     client.println("Connection: close");
     client.println(); // end HTTP header
 
     while(client.connected()) {
       if(client.available()){
         // read an incoming byte from the server and print it to serial monitor:
+
+
+
         char c = client.read();
-        Serial.print(c);
+
+
+        DynamicJsonDocument doc(1024);
+        deserializeJson(doc, c);      
+
+        int id = doc["id"];
+        
+
+        
+          
+        
+        
+
+      
+
+
       }
     }
 
