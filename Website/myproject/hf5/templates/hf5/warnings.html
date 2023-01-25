@@ -40,7 +40,7 @@
 
 
  {% if item.Local.id == device or device == 0 or device == None%}
- <li>Drivhus {{item.local_id}} {{item.Type.type}} {{item.AlarmType.name}} {{item.CreatedAt}} </li>
+ <li>Drivhus {{item.local_id}} {{item.Type.type}} {{item.AlarmType.name}} Value: {{item.value}} {{item.CreatedAt}} </li>
 {% endif %}
     
 

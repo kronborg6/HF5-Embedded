@@ -13,19 +13,31 @@ import hashlib
 
 
 #API-ting
-url = 'http://127.0.0.1:8000/'
+url = 'http://10.130.54.111:8000/'
 username = "Admin"
 password = "Password"
 
 
 def index (request):
 
+
+
+   
+
+
     
-    
-    token = request.session.get('token')
-    headers = {"Authorization": "Bearer " + token }    
+    if request.session.get('token'):
+        token = request.session.get('token')
+        headers = {"Authorization": "Bearer " + token }    
     
 
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+
+
+        
+    
+   
 
 
     if token:
@@ -34,6 +46,7 @@ def index (request):
     else:
         
         data = ""
+        return HttpResponseRedirect(reverse("login")) 
 
     #Params
     device = request.GET.get("device")
@@ -72,6 +85,16 @@ def index (request):
 
 
 def warnings(request):
+
+    
+    if request.session.get('token'):
+        token = request.session.get('token')
+        headers = {"Authorization": "Bearer " + token }    
+    
+
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+
     
 
     token = request.session.get('token')
@@ -82,7 +105,8 @@ def warnings(request):
         response = requests.get(url + "alarm", headers=headers)
         data = response.json()  
     else:
-        data = ""        
+        data = ""   
+        return HttpResponseRedirect(reverse("login"))      
 
     
     #Params
@@ -139,17 +163,18 @@ class EditForm(forms.Form):
 
     
 
-def isNull(value):
-
-    if value == None:
-
-        return True
-    else:
-        return False
-
-
 
 def startup(request):
+
+    
+    if request.session.get('token'):
+        token = request.session.get('token')
+        headers = {"Authorization": "Bearer " + token }    
+    
+
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+
 
 
 
@@ -157,20 +182,22 @@ def startup(request):
    
     headers = {"Authorization": "Bearer " + token }
 
-    data = ""
+    data = ""    
 
     if token:
        
 
         response = requests.get(url + "startup", headers=headers)
-        data = response.json()    
+        data = response.json()   
 
 
+        
     
 
         if request.method == "POST":
 
             form = EditForm(request.POST)
+            
 
 
             if form.is_valid():
@@ -237,7 +264,13 @@ def startup(request):
 
 
             x = requests.put(url + "startup/" + str(id), headers=headers, json=myobj)
+
+            
             return HttpResponseRedirect(reverse("startup")) 
+
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+           
 
         
 

@@ -41,7 +41,7 @@
 
 
     {% if dict.Local.id == device or device == 0 or device == None%}
-        <li>Drivhus: {{dict.Local.id}} Temperature: {{dict.temp}} Humidity: {{dict.hum}} Time: {{dict.CreatedAt}} </li>
+        <li>Drivhus: {{dict.Local.id}} Temperature: {{dict.temp}}C Humidity: {{dict.hum}}% Time: {{dict.CreatedAt}} </li>
     {% endif %}
 
 {% endfor %}
