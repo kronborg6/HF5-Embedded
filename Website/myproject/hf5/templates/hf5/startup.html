@@ -6,6 +6,9 @@
 
 {% block body%}
 
+
+<h1>Startup</h1>
+
 <ul>
 
 
@@ -54,16 +57,28 @@
 
 </div>
 
+
+{% if data != ""%}
+
 <h3 style="color: red;">{{message}}</h3>
     <form action="{% url 'startup'  %}" method="POST">
         {% csrf_token %}
-        <p>{{form.id.label}} {{form.id}}<p>        
-        <p>{{form.start_time.label}} {{form.start_time}}<p>
-        <p>{{form.end_time.label}} {{form.end_time}}<p>
+        <p>{{form.id.label}} {{form.id}}</p>        
+        <p>{{form.start_time.label}} {{form.start_time}}</p>
+        <p>{{form.end_time.label}} {{form.end_time}}</p>
+        <p>{{form.max_temp.label}} {{form.max_temp}}</p>
+        <p>{{form.min_temp.label}} {{form.min_temp}}</p>
+        <p>{{form.max_hum.label}} {{form.max_hum}}</p>
+        <p>{{form.min_hum.label}} {{form.min_hum}}</p>
+        <p>{{form.max_noise_level.label}} {{form.max_noise_level}}</p>
+
+
+
+
         <br><br>
         <input type="submit" value="Save">
     </form>
-
+{% endif %}
 
 </ul>
 

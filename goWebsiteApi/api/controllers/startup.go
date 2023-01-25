@@ -4,8 +4,8 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/models"
-	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/repos"
+	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/models"
+	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/repos"
 	"gorm.io/gorm"
 )
 
@@ -71,6 +71,8 @@ func Test(c *fiber.Ctx) error {
 
 // here we have the Update controller that take in a body that is a json body of startup model
 func (controller *StartupController) Update(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+
 	// here it set what the data must look like
 	var startup models.Startup
 	var err error
@@ -79,7 +81,7 @@ func (controller *StartupController) Update(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	// here it send the body data to repo if not it give's a error
-	if startup, err = controller.repo.UpdateStartup(1, startup); err != nil {
+	if startup, err = controller.repo.UpdateStartup(id, startup); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	// here it retun the model
@@ -100,5 +102,5 @@ func RegisterStartupController(db *gorm.DB, router fiber.Router) {
 	StartupRouter.Get("/", controller.GetAll)
 	StartupRouter.Get("/:id", controller.GetById)
 	StartupRouter.Post("/", controller.Create)
-	StartupRouter.Put("/", controller.Update)
+	StartupRouter.Put("/:id", controller.Update)
 }

@@ -1,11 +1,10 @@
 package repos
 
 import (
-	"github.com/kronborg6/HF5-Embedded/goEmbeddedApi/api/models"
+	"github.com/kronborg6/HF5-Embedded/goWebsiteApi/api/models"
 	"gorm.io/gorm"
 )
 
-// here we declare that StartupRepo is the database
 type StartupRepo struct {
 	db *gorm.DB
 }
@@ -62,6 +61,7 @@ func (repo *StartupRepo) UpdateStartup(id int, startup models.Startup) (models.S
 }
 
 // retun the repo whit the database
+
 func NewStartupRepo(db *gorm.DB) *StartupRepo {
 	return &StartupRepo{db}
 }

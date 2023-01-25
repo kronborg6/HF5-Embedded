@@ -7,10 +7,13 @@
 {% block body%}
 
 
+
+
+
 <script src="{% static 'index.js' %}"></script>
 
 
-
+<h1>Alt data</h1>
 
 {% if device == 1 %}
 <button id="1" class="btn btn-secondary">Drivhus 1</button> 
@@ -34,16 +37,32 @@
 
 
 <ul>
-{% for dict in data %}   
+{% for dict in page.object_list %}   
 
 
     {% if dict.Local.id == device or device == 0 or device == None%}
-        <li>Drivhus: {{dict.Local.id}} Temperature: {{dict.temp}} Humidity: {{dict.hum}} Time: {{dict.CreatedAt}} </li>
+        <li>Drivhus: {{dict.Local.id}} Temperature: {{dict.temp}}C Humidity: {{dict.hum}}% Time: {{dict.CreatedAt}} </li>
     {% endif %}
 
 {% endfor %}
 
 </ul>
+
+
+
+
+
+
+<footer>
+
+    {% if page.has_previous %}
+    <a id="previous" data-page="{{page.previous_page_number}}" class="btn next-previous btn-secondary">Previous</a>
+    {% endif %}
+    {% if page.has_next %}
+    <a id="next" data-page="{{page.next_page_number}}" class="btn next-previous btn-primary">Next</a>
+    {% endif %}
+
+</footer>
 
 
 

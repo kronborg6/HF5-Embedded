@@ -6,11 +6,14 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("2").onclick = function() {set_device("2")};
     document.getElementById("0").onclick = function() {set_device("0")};
 
+
+    const previous_button = document.getElementById("previous");
+    const next_button = document.getElementById("next");
     
 
  
 
-/*
+
 
     if(next_button){
         
@@ -40,14 +43,13 @@ document.addEventListener("DOMContentLoaded", function(){
         var search_params = url.searchParams;        
         search_params.set('page', previous_button.dataset.page);
         url.search = search_params.toString();        
-        var new_url = url.toString();           
-       
+        var new_url = url.toString();          
         window.location = new_url;  
     
     
 
 }
-    */
+    
 
 
 
@@ -60,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function(){
             var url = new URL(window.location.href);
             var search_params = url.searchParams;        
             search_params.set('device', device);     
+            search_params.set('page', 1);   
             url.search = search_params.toString();        
             var new_url = url.toString();           
             window.location = new_url;                       

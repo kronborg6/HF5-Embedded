@@ -17,10 +17,10 @@ func (controller *DataController) GetAll(c *fiber.Ctx) error {
 	data, err := controller.repo.FindAll()
 
 	if err != nil {
-		return c.JSON((fiber.Map{
+		return c.JSON(fiber.Map{
 			"message": "faild to fetch data",
 			"error":   err,
-		}))
+		})
 	}
 	return c.JSON(data)
 }

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-import requests, pickle
+import requests
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
@@ -17,20 +17,27 @@ url = 'http://10.130.54.111:8000/'
 username = "Admin"
 password = "Password"
 
-print("Kronborg")
-
-
-
 
 def index (request):
 
-    
-    token = request.session.get('token')
-    headers = {"Authorization": "Bearer " + token }
+
+
+   
+
 
     
+    if request.session.get('token'):
+        token = request.session.get('token')
+        headers = {"Authorization": "Bearer " + token }    
     
 
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+
+
+        
+    
+   
 
 
     if token:
@@ -39,25 +46,38 @@ def index (request):
     else:
         
         data = ""
+        return HttpResponseRedirect(reverse("login")) 
 
     #Params
     device = request.GET.get("device")
     if device:
         device = int(device)    
     else:
-        device = 0        
+        device = 0            
 
-    session = requests.session()  # or an existing session
+    _data = list()    
 
-    with open('somefile', 'rb') as f:
-        print(session.cookies.update(pickle.load(f)))
+    for index, item in enumerate(data):
+
+        if item["local_id"] == device:
+
+            _data.append(item)        
+
+        elif device == 0:
+
+            _data.append(item)
+    
 
 
+    data_paginator = Paginator(_data, 9)       
+    page_number = request.GET.get("page") 
+    page = data_paginator.get_page(page_number)     
 
 
     return render(request, "hf5/index.html",{       
 
         "data" : data,
+        "page" : page,
         "device" : device      
         
       
@@ -65,6 +85,16 @@ def index (request):
 
 
 def warnings(request):
+
+    
+    if request.session.get('token'):
+        token = request.session.get('token')
+        headers = {"Authorization": "Bearer " + token }    
+    
+
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+
     
 
     token = request.session.get('token')
@@ -75,7 +105,8 @@ def warnings(request):
         response = requests.get(url + "alarm", headers=headers)
         data = response.json()  
     else:
-        data = ""        
+        data = ""   
+        return HttpResponseRedirect(reverse("login"))      
 
     
     #Params
@@ -83,76 +114,165 @@ def warnings(request):
     if device:
         device = int(device)    
     else:
-        device = 0        
+        device = 0       
+
+
+    _data = list()
+
+    for index, item in enumerate(data):
+
+        if item["local_id"] == device:
+
+            _data.append(item)        
+
+        elif device == 0:
+
+            _data.append(item)
+
+
+
+
+    data_paginator = Paginator(_data, 9)       
+    page_number = request.GET.get("page") 
+    page = data_paginator.get_page(page_number)   
+
+
+
+
 
 
     return render(request, "hf5/warnings.html",{
 
         "data" : data,
-        "device" : device
+        "device" : device,
+        "page" : page
         
         
     })
 
 
 class EditForm(forms.Form):    
-    id = forms.CharField(label = "id")
-    start_time = forms.CharField(label = "Start-time")    
-    end_time = forms.CharField(label = "End-time")    
+    id = forms.CharField(label = "id", required=True)
+    start_time = forms.CharField(label = "Start-time",required=False)    
+    end_time = forms.CharField(label = "End-time",required=False) 
+    max_temp = forms.CharField(label = "Max-temp",required=False)
+    min_temp = forms.CharField(label = "Min-temp",required=False)
+    max_hum = forms.CharField(label = "Max-hum",required=False)
+    min_hum = forms.CharField(label = "Min-hum",required=False)
+    max_noise_level = forms.CharField(label = "Max-noise-level",required=False)
+
     
 
 
-
-"""
-
-    "start_time": 9,
-"end_time": 18,
-"min_temp": 5,
-"max_temp": 100,
-"min_hum": 10,
-"max_hum": 20,
-"max_noise_level": 400
-
-"""
 def startup(request):
+
+    
+    if request.session.get('token'):
+        token = request.session.get('token')
+        headers = {"Authorization": "Bearer " + token }    
+    
+
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+
 
 
 
     token = request.session.get('token')
+   
     headers = {"Authorization": "Bearer " + token }
 
-    response = requests.get(url + "startup", headers=headers)
-    data = response.json()    
+    data = ""    
 
+    if token:
+       
+
+        response = requests.get(url + "startup", headers=headers)
+        data = response.json()   
+
+
+        
     
 
-    if request.method == "POST":
+        if request.method == "POST":
 
-        form = EditForm(request.POST)
-
-
-        if form.is_valid():
-            id = form.cleaned_data["id"]
-            start_time = form.cleaned_data["start_time"] 
-            end_time = form.cleaned_data["end_time"]   
-
-            print(id + " " + start_time + " " + end_time)
+            form = EditForm(request.POST)
+            
 
 
+            if form.is_valid():
 
 
+                id = form.cleaned_data["id"]
+                start_time = form.cleaned_data["start_time"] 
+                end_time = form.cleaned_data["end_time"]   
+                max_temp = form.cleaned_data["max_temp"]
+                min_temp = form.cleaned_data["min_temp"]
+                max_hum = form.cleaned_data["max_hum"]
+                min_hum = form.cleaned_data["min_hum"]
+                max_noise_level = form.cleaned_data["max_noise_level"]
+                
+
+            
+            if start_time == "":
+                start_time = data[int(id) -1]["start_time"]
+            else:
+                start_time = int(start_time)  
+
+            if end_time == "":
+                end_time = data[int(id) -1]["end_time"]
+            else:
+                end_time = int(end_time)       
+
+            if max_temp == "":
+                max_temp = data[int(id) -1]["max_temp"]
+            else:
+                max_temp = int(max_temp)         
+
+            if min_temp == "":
+                min_temp = data[int(id) -1]["min_temp"]
+            else:
+                min_temp = int(min_temp)    
+
+            if max_hum == "":
+                max_hum = data[int(id) -1]["max_hum"]
+            else:
+                max_hum = int(max_hum)  
+
+            if min_hum == "":
+                min_hum = data[int(id) -1]["min_hum"]
+            else:
+                min_hum = int(min_hum)  
+
+            if max_noise_level == "":
+                max_noise_level = data[int(id) -1]["max_noise_level"]
+            else:
+                max_noise_level = int(max_noise_level)                
+               
 
 
-        myobj = {
-        "local": "Drivehus 24",
-        "start_time": 70,
-        "min_temp": 1000
-        }      
+            myobj = {            
+            "start_time": start_time,
+            "end_time": end_time,
+            "max_temp" : max_temp,
+            "min_temp" : min_temp,
+            "max_hum" : max_hum,
+            "min_hum" : min_hum,
+            "max_noise_level" : max_noise_level            
+            }      
+           
 
 
-        x = requests.put(url + "startup", data = myobj,auth=(username,password))
-        print(myobj)
-        print(x)
+            x = requests.put(url + "startup/" + str(id), headers=headers, json=myobj)
+
+            
+            return HttpResponseRedirect(reverse("startup")) 
+
+    else:
+        return HttpResponseRedirect(reverse("login")) 
+           
+
+        
 
     return render(request, "hf5/startup.html",{
 
@@ -168,7 +288,7 @@ def logout(request):
 
 
     request.session['token'] = ""
-    print("lort")
+   
 
     return HttpResponseRedirect(reverse("login"))  
 
@@ -181,20 +301,16 @@ def login(request):
         password = request.POST["password"]   
 
 
-
         myobj = {'username': "kronborg", "password" : "Kronborg"}
-
-
         x = requests.post(url + "user/login", json = myobj)   
         json_response = x.json()
-
         token = json_response["token"]
-        session = requests.session()     
-
-        
-       
+        session = requests.session()        
 
         request.session['token'] = token 
+
+       
+        
         
 
 
